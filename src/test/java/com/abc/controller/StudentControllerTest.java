@@ -5,10 +5,10 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -23,9 +23,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
-
-import com.abc.model.Student;
+import org.springframework.web.context.WebApplicationContext;import com.abc.model.Student;
 import com.abc.service.StudentService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -33,7 +31,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @AutoConfigureMockMvc
 public class StudentControllerTest {
 
-	Student student;
+	Student student; 
 	List<Student> studentList;
 
 	ObjectMapper objectMapper = new ObjectMapper();;
@@ -89,30 +87,42 @@ public class StudentControllerTest {
 		Student expectedOutput = studentController.updateStudent(student, i);
 		assertEquals(student.toString(), expectedOutput.toString());
 
-	}
+	} 
+	
 
-	@Test
+@Test
+public void updateBookTest() throws Exception {
+	String jsonRequest = objectMapper.writeValueAsString(student);
+	when(studentService.updateStudent(Mockito.any(Student.class),Mockito.anyInt())).thenReturn(student);
+	MvcResult mvcResult = mockMvc
+			.perform(put("/update/{id}").content(jsonRequest).contentType(MediaType.APPLICATION_JSON_VALUE))
+			.andExpect(status().isOk()).andReturn();
+	String expectedOutput = mvcResult.getResponse().getContentAsString();
+	Integer id = Integer.parseInt(expectedOutput);
+	             
+//	Student expectedOutputStudent = objectMapper.readValue(expectedOutput, Student.class);
+	assertEquals(id, student.getStudentId());
+}
+ 
+	@Test 
 	public void deleteStudent_test() {
 		when(studentService.deletStudent(Mockito.anyInt())).thenReturn(student.getStudentId());
 		Integer id = studentController.deletStudent(student.getStudentId());
-		System.out.println("id:" + id);
 		assertEquals(student.getStudentId(), (Integer) id);
-
 	}
- 
-	@Test
+
+	@Test 
 	public void deleteBookTest() throws Exception {
 		String jsonRequest = String.valueOf(student.getStudentId());
-		int id = Integer.parseInt(jsonRequest);
+
+
 		when(studentService.getById(Mockito.anyInt())).thenReturn(student);
 		MvcResult mvcResult = mockMvc.perform(delete("/Delete/{id}", jsonRequest)).andExpect(status().isOk())
 				.andReturn();
 		String expectedOutput = mvcResult.getResponse().getContentAsString();
-		System.out.println("id:" + id);
 		System.out.println("expectedOutput:" + expectedOutput);
 		Integer id1 = Integer.parseInt(expectedOutput);
-//		Student expectedOutputUser = objectMapper.readValue(expectedOutput, Student.class);
-		assertEquals(student.getStudentId(), (Integer) id);
+		assertEquals(student.getStudentId(), (Integer) id1);
 
 	}
 
@@ -121,8 +131,7 @@ public class StudentControllerTest {
 		student.setStudentId(45);
 		student.setStudentName("yogesh");
 		return student;
-
-	}
+	} 
 
 	private List<Student> getList() {
 		List<Student> studentList = new ArrayList<>();
@@ -140,5 +149,4 @@ public class StudentControllerTest {
 		return studentList;
 
 	}
-
 }

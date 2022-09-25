@@ -29,7 +29,7 @@ public class StudentService {
 	public List<Student> getByName(String studentName) {
 		return this.studentRepository.findByStudentName(studentName);
 		
-	}  
+	}   
 
 	public Student updateStudent(Student student,int id) {
 	Student	student1 = this.studentRepository.findById(id).orElse(null);
