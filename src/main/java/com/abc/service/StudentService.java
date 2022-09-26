@@ -38,7 +38,7 @@ public class StudentService {
 		return studentRepository.save(student1);
 	} 
 
-	
+	 
 //	public int deleteUser(int id) {
 //		int userId = userRepository.findById(id).orElse(null).getId();
 //		userRepository.deleteById(id);
@@ -50,7 +50,7 @@ public class StudentService {
 
 		 this.studentRepository.deleteById(studentId);
 
-		return studentId;
+		return studentId; 
 	}
 
 	

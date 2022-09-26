@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,32 +17,31 @@ import com.abc.repository.StudentRepository;
 
 @SpringBootTest
 public class RepositoryClassTest {
-/*
+
 	Student student;
 //	List<Student> listStudent;
 //Student student=new Student();
 	@Autowired
 	StudentRepository studentRepository;
 
-	@BeforeEach 
+	@BeforeEach
 	void setup() {
 		student = getStudent();
 //		 listStudent=new ArrayList<>();
- 
-	} 
+
+	}
 
 	@Test
 	void addStudent_test() {
-		student  = getStudent();
-//		Student st2 = new Student();
-//		st2.setStudentId(40);
-//		st2.setStudentName("kanu");
-		Student saveStudent = studentRepository.save(student);
-
-//	      assertThat(saveStudent.getStudentId()).isGreaterThan(0);
-		assertEquals(student.toString(), saveStudent.toString());
+		Student st2 = new Student();
+		st2.setStudentId(33);
+		st2.setStudentName("kanu");
+		System.out.println(student.getStudentId());
+		Student saveStudent = studentRepository.save(st2);
+		System.out.println(saveStudent.getStudentId());
+		assertEquals(st2.getStudentId(), saveStudent.getStudentId());
 	}
- 
+
 	@Test
 	void allGetStudent_test() {
 		Student student = new Student();
@@ -49,8 +49,8 @@ public class RepositoryClassTest {
 		student.setStudentId(3);
 		studentRepository.save(student);
 		List<Student> listStudent = studentRepository.findAll();
-		assertThat(listStudent).isNotNull(); 
-		 assertThat(listStudent.size()).isEqualTo(listStudent.size());
+		assertThat(listStudent).isNotNull();
+		assertThat(listStudent.size()).isEqualTo(listStudent.size());
 
 //		assertEquals(listStudent.size(), listStudent.size());
 
@@ -58,37 +58,40 @@ public class RepositoryClassTest {
 
 	@Test
 	void deletStudent_test() {
-		studentRepository.save(student);
+		Student student2 = new Student();
+		student2.setStudentName("kanu");
+		student2.setStudentId(3);
+		
+		studentRepository.save(student2); 
 
-		studentRepository.deleteById(student.getStudentId());
-		java.util.Optional<Student> studentOptional = studentRepository.findById(student.getStudentId());
+		studentRepository.deleteById(student2.getStudentId());
+     Optional<Student> studentOptional = studentRepository.findById(student2.getStudentId());
 
-		assertThat(studentOptional).isEmpty();
-
-	}
+     assertThat(studentOptional).isEmpty();
+}
+	
 
 	@Test
 	void updateStudent_test() {
 		studentRepository.save(student);
 		Student saveStudent = studentRepository.findById(student.getStudentId()).get();
 
-		System.out.println("student:"+saveStudent.toString());
+		System.out.println("student:" + saveStudent.toString());
 		saveStudent.setStudentId(2);
 		saveStudent.setStudentName("Ram");
-//		student.setPrice(400);
 		Student updatedStudent = studentRepository.save(saveStudent);
 
 		assertEquals(saveStudent.toString(), updatedStudent.toString());
-
+ 
 	}
 
 	private Student getStudent() {
 		Student student = new Student();
 		student.setStudentName("kanu");
-		student.setStudentId(45);
+		student.setStudentId(2);
 
 		return student;
 
-	} 
-	*/
+	}
+
 }

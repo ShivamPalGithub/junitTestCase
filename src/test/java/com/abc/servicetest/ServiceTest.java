@@ -37,16 +37,8 @@ public class ServiceTest {
 	@BeforeEach
 	void setup() {
 		Student student = getStudent();
-		list = new ArrayList();
+		list = getStudentList();
 		studentId = 12;
-		Student student1 = new Student();
-		student1.setStudentName("abhishak");
-		student1.setStudentId(12);
-		Student student2 = new Student();
-		student2.setStudentName("abhishak");
-		student2.setStudentId(12);
-		list.add(student1);
-		list.add(student2);
 
 	}
 
@@ -61,25 +53,20 @@ public class ServiceTest {
 	}
 
 	@Test
-	public void getStudent_test() {
+	public void getStudentAll_test() {
 		Student student1 = new Student();
 		student1.setStudentName("abhishak");
 		student1.setStudentId(12);
 
 		when(repo.findAll()).thenReturn(list);
 		List<Student> studentList = studentService.getStudent();
-//	  when(repo.findAll(Mockito.any(List<Student>.class))).thenReturn(list);
-//	  List<Student>student2 = studentService.getStudent();
 
-//		assertThat(studentList).isNotNull(); 
-//		assertThat(studentList.size()).isEqualTo(2);
 		assertEquals(list, studentList);
 
 	}
 
 	@Test
 	public void updateStudent_test() {
-		// given - precondition or setup
 		Student student = new Student();
 		student.setStudentName("abhishak");
 		student.setStudentId(12);
@@ -94,17 +81,29 @@ public class ServiceTest {
 
 	}
 
-//	@Test
-//	void deletStudent_Test() {
-//
-//		Student student1 = new Student();
-//		student1.setStudentName("abhishak");
-//		student1.setStudentId(12);
-//		when(repo.deleteById(studentId)).thenReturn();
-//		student2 = studentService.saveStudent(student1);
-//		assertEquals(student1.toString(), student2);
-//
-//	}
+	@Test
+	void deleteUser_test() {
+		Student student1 = new Student();
+		student1.setStudentName("abhishak");
+		student1.setStudentId(12);
+		when(repo.findById(Mockito.anyInt())).thenReturn(Optional.of(student1));
+		int id = studentService.deletStudent(student1.getStudentId());
+		assertEquals(student1.getStudentId(), id);
+	}
+
+	private List<Student> getStudentList() {
+		ArrayList list = new ArrayList();
+		Student student1 = new Student();
+		student1.setStudentName("abhishak");
+		student1.setStudentId(12);
+		Student student2 = new Student();
+		student2.setStudentName("abhishak");
+		student2.setStudentId(12);
+		list.add(student1);
+		list.add(student2);
+
+		return list;
+	}
 
 	private Student getStudent() {
 		Student student = new Student();

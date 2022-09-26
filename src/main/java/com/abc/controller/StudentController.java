@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.abc.model.Student;
 import com.abc.service.StudentService;
-
+ 
 @RestController
 public class StudentController {
 	

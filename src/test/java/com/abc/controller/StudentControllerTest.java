@@ -6,6 +6,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,6 +55,7 @@ public class StudentControllerTest {
 
 		this.mockMvc = MockMvcBuilders.standaloneSetup(studentController).build();
 		student = getstudent();
+		studentList=getStudentList();
 
 	}
 
@@ -88,7 +91,7 @@ public class StudentControllerTest {
 		assertEquals(student.toString(), expectedOutput.toString());
 
 	} 
-	
+	 
 
 @Test
 public void updateBookTest() throws Exception {
@@ -102,7 +105,7 @@ public void updateBookTest() throws Exception {
 	             
 //	Student expectedOutputStudent = objectMapper.readValue(expectedOutput, Student.class);
 	assertEquals(id, student.getStudentId());
-}
+} 
  
 	@Test 
 	public void deleteStudent_test() {
@@ -114,17 +117,44 @@ public void updateBookTest() throws Exception {
 	@Test 
 	public void deleteBookTest() throws Exception {
 		String jsonRequest = String.valueOf(student.getStudentId());
+		int id1 = Integer.parseInt(jsonRequest);
 
 
 		when(studentService.getById(Mockito.anyInt())).thenReturn(student);
 		MvcResult mvcResult = mockMvc.perform(delete("/Delete/{id}", jsonRequest)).andExpect(status().isOk())
 				.andReturn();
 		String expectedOutput = mvcResult.getResponse().getContentAsString();
-		System.out.println("expectedOutput:" + expectedOutput);
-		Integer id1 = Integer.parseInt(expectedOutput);
 		assertEquals(student.getStudentId(), (Integer) id1);
 
+	}  
+	
+	
+	@Test
+	public void getAllStudent_Test()
+	{
+		when(studentService.getStudent()).thenReturn(studentList);
+		List<Student> actualUserList = studentController.findAllStudent();
+		assertEquals(actualUserList.size(), studentList.size());
+		
 	}
+	 
+	@Test
+	public void getAllStudentTest() throws Exception {
+		when(studentService.updateStudent(Mockito.any(Student.class),Mockito.anyInt())).thenReturn(student);
+		MvcResult mvcResult = mockMvc
+				.perform(get("/get")) 
+				.andExpect(status().isOk()).andReturn();
+		int status=mvcResult.getResponse().getStatus();
+		System.out.println(studentList.toString());
+		assertEquals(200, status);
+		//String expectedOutput = mvcResult.getResponse().getContentAsString();
+		//Books[] bookList = super.mapFromJson(expectedOutput, Books[].class);
+		//assertEquals(bookList.length()>0);
+	
+	
+	}
+	 
+	
 
 	private Student getstudent() {
 		Student student = new Student();
@@ -133,7 +163,7 @@ public void updateBookTest() throws Exception {
 		return student;
 	} 
 
-	private List<Student> getList() {
+	private List<Student> getStudentList() {
 		List<Student> studentList = new ArrayList<>();
 		Student student = new Student();
 		student.setStudentId(45);
